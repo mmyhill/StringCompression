@@ -1,5 +1,6 @@
 import java.util.ArrayList;
 import java.util.List;
+import java.util.StringTokenizer;
 
 /*
 * StringCompression
@@ -7,12 +8,12 @@ import java.util.List;
 * Author/s: Morgan Myhill
 * 9/21/18
 * On My Honor: MM
-* Collaborators:
+* Collaborators: Uly
 */
 public class Dictionary {
 
     private List<String> dict;
-    private int dictSize;
+   // private int dictSize;
 
     public static String disemvowel(String in){
         String toReturn = "";
@@ -62,38 +63,63 @@ public class Dictionary {
         dict =  new ArrayList();
     }
 
-    public String dictCompress(String in, String toComp){//should this be static???
+    public void dictCompress(String in, String toComp){//should this be static???
         dict.add(toComp);
-        String toReturn = "";
-        //List<String> sepTokens = new ArrayList();
-        String sepTok = "";
-        int lastGoodInd = 0;
-        int numCompress = 0;
-        for(int i = 0; i < in.length(); i++){
-            sepTok += in.charAt(i);
-            if(sepTok.indexOf(toComp) >= 0){//if phrase to compress is found (will be at end!)
-                toReturn += in.substring(lastGoodInd, i - toComp.length()) + (dict.size() - 1);//number replacement will
-                //be ind in dictionary ArrayList
-                lastGoodInd = i - toComp.length();
-                numCompress++;
-            }
-        }
-        int count = 1;
-        toReturn += "/n";
-        for(int i = 0; i < dict.size(); i++){
-            toReturn += count + ". " + dict.get(i) + "/n";
-            count++;
-        }
-        dictSize += toReturn.length();
+        String toReturn = in;
 
 //        Calculates the compression rate as follows and displays it to the screen: (length of original text - length of
 //        compressed text + number of keys in Dict + length of strings Values in Dict) /length of original text
 
+        int dictLength = 0;
+        String elemsDict = "{";
+        for(int i = 0; i < dict.size(); i++){
+            dictLength += dict.get(i).length();
+            toReturn = toReturn.replace(dict.get(i), "" + i);
+            elemsDict += "" + i + ":" + dict.get(i) + ", ";
+        }
+        elemsDict = elemsDict.substring(0,elemsDict.length() - 2);
+        elemsDict += "}";
+        String compressRate = "" + ((in.length() - toReturn.length() + dict.size() + dictLength)/(1.0 * in.length()) * 100);
+        System.out.println(toReturn + "\nCompress Rate: " + compressRate.substring(0,compressRate.indexOf(".")+3) + "%");
+        System.out.println(elemsDict);
 
-        int compressRate = (in.length() - numCompress * toComp.length() + dict.size() + dictSize)/in.length();
-        toReturn += "Compress Rate = " + compressRate + "/n";
-        return toReturn;
     }
+
+//    public String dictCompress(String in, String toComp){//should this be static???
+//        dict.add(toComp);
+//        String toReturn = "";
+//        //List<String> sepTokens = new ArrayList();
+//        String sepTok = "";
+//        int lastGoodInd = 0;
+//        int numCompress = 0;
+//        for(int i = 0; i < in.length(); i++){
+//            sepTok += in.charAt(i);
+//            if(sepTok.indexOf(toComp) >= 0){//if phrase to compress is found (will be at end!)
+//                toReturn += "" + in.substring(lastGoodInd, i - toComp.length()) + (dict.size() - 1);//number replacement will
+//                //be ind in dictionary ArrayList
+//                lastGoodInd = i - toComp.length();
+//                numCompress++;
+//            }
+//        }
+//
+//        int count = 1;
+//        toReturn += "/n";
+//        for(int i = 0; i < dict.size(); i++){
+//            toReturn += "" + count + ". " + dict.get(i) + "/n";
+//            count++;
+//        }
+//        dictSize += toReturn.length();
+//
+////        Calculates the compression rate as follows and displays it to the screen: (length of original text - length of
+////        compressed text + number of keys in Dict + length of strings Values in Dict) /length of original text
+//
+//
+//        int compressRate = (in.length() - numCompress * toComp.length() + dict.size() + dictSize)/in.length();
+//        toReturn += "Compress Rate = " + compressRate + "/n";
+//        return toReturn;
+//    }
+
+
 
 
 }
